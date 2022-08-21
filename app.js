@@ -136,6 +136,6 @@ app.get('/zoomsignature/:name', (req, res) => {
   })
 
 
-http.createServer(app).listen(app.get('port'), function() {
+http.createServer(app).listen(process.env.PORT || app.get('port'), function() {
     console.log('Agora Server starts at ' + app.get('port'));
 });
