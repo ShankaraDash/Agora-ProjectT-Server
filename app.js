@@ -18,7 +18,7 @@ var expirationTimeInSeconds = 3600
 //Zoom Cred 
 var ZOOM_API_KEY = "RCSaKX53beXEwKzstNVSdqPk9ERbnMg7kAl6";
 
-var çapp = express();
+var app = express();
 app.disable('x-powered-by');
 app.set('port', 8080);
 app.use(express.favicon());
