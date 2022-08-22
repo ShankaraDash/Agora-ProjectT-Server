@@ -12,8 +12,8 @@ var vonageAPIKey = "47546991";
 var vonageSecret = "59203ea5e094de7fff67cb229a9a5d0753d873c5";
 
 //Agora Cred 
-var agoraAppID = "3b8f398e00dc4602b06c60416a3a16b2";
-var agoraAppCertificate = "ce24a9cb5e04407abb93fa79a251c119";
+var agoraAppID = "5368a8c9785e462197a41827cda88d96";
+var agoraAppCertificate = "e4c907781536450783184d5f00c12f4f";
 var expirationTimeInSeconds = 3600
 
 //Zoom Cred 
@@ -62,7 +62,7 @@ app.get('/twillio/token', function(request, response) {
 
     response.setHeader('Content-Type', 'application/json');
     response.setHeader("Access-Control-Allow-Origin", "*")
-    response.setHeader("Access-Control-Allow-Origin", "localhost:3000")
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
     response.send({"token": tokenGenerator(identity, room)});
 });
 
