@@ -60,8 +60,9 @@ app.get('/twillio/token', function(request, response) {
     const identity = request.query.identity || 'identity';
     const room = request.query.room;
 
-    res.setHeader('Content-Type', 'application/json');
-    res.header("Access-Control-Allow-Origin", "*")
+    response.setHeader('Content-Type', 'application/json');
+    response.setHeader("Access-Control-Allow-Origin", "*")
+    response.setHeader("Access-Control-Allow-Origin", "localhost:3000")
     response.send({"token": tokenGenerator(identity, room)});
 });
 
