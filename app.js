@@ -62,7 +62,7 @@ app.get('/twillio/token', function(request, response) {
 
     response.setHeader('Content-Type', 'application/json');
     response.setHeader("Access-Control-Allow-Origin", "*")
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
     response.send({"token": tokenGenerator(identity, room)});
 });
 
@@ -74,7 +74,7 @@ var roomToSessionIdDictionary = {};
 app.get('/vonage/session', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Origin", "localhost:3000")
+    res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
     res.redirect('/vonage/room/session');
 });
 
