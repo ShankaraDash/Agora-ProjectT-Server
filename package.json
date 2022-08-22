@@ -9,6 +9,7 @@
     "agora-access-token": "^2.0.1",
     "express": "3.4.8",
     "jsrsasign": "^10.5.26",
+    "twilio": "^3.0.0",
     "opentok": "^2.11.0"
   },
   "main": "DemoServer.js",

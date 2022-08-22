@@ -5,6 +5,7 @@ var express = require('express');
 var OpenTok = require('opentok');
 var { RtcTokenBuilder, RtcRole } = require('agora-access-token')
 
+const AccessToken = require('twilio').jwt.AccessToken;
 
 // Vonage/TokBox Cred
 var vonageAPIKey = "47546991";
@@ -30,6 +31,35 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
+});
+
+const VideoGrant = AccessToken.VideoGrant;
+
+function tokenGenerator(identity, room) {
+  // Create an access token which we will sign and return to the client,
+  // containing the grant we just created
+  const token = new AccessToken(
+    'ACf2dddd4c5aa931567228e5f837ae1c49',
+    'SKeb70b556ae033532f8937be742a80264',
+    'q6YeGIiM71l2fQcbOsCJgx5Fln981aLk'
+  );
+
+  // Assign identity to the token
+  token.identity = identity;
+
+  // Grant the access token Twilio Video capabilities
+  const grant = new VideoGrant();
+  grant.room = room;
+  token.addGrant(grant);
+
+  // Serialize the token to a JWT string
+  return token.toJwt();
+}
+
+app.get('/twillio/token', function(request, response) {
+    const identity = request.query.identity || 'identity';
+    const room = request.query.room;
+    response.send({"token": tokenGenerator(identity, room)});
 });
 
 
