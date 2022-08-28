@@ -72,6 +72,11 @@ function tokenGenerator(identity, room) {
 // OpenTok/ Vonage Routes
 var opentok = new OpenTok(vonageAPIKey, vonageSecret);
 var roomToSessionIdDictionary = {};
+app.get('/vonage/session', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    res.redirect('/vonage/room/session');
+});
 
 app.get('/vonage/room/:name', function (req, res) {
     var roomName = req.params.name;
