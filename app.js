@@ -1,6 +1,7 @@
 // Common Imports
 const http = require('http');
 const express = require('express');
+import cors from 'cors';
 
 // Agora Imports
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token')
