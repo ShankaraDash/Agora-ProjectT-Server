@@ -1,7 +1,6 @@
 // Common Imports
 const http = require('http');
 const express = require('express');
-import cors from 'cors';
 
 // Agora Imports
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token')
@@ -41,43 +40,13 @@ app.set('port', 8080);
 app.use(express.favicon());
 app.use(app.router);
 
-// app.use(function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');    
-//     // res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
-//     // res.setHeader('Access-Control-Allow-Credentials', true);
-//     next();
-// });
-
-const corsOpts = {
-    origin: 'https://agora-3d464.web.app',
-  
-    methods: [
-      'GET',
-      'POST',
-      'OPTIONS'
-    ],
-  
-    allowedHeaders: [
-      'Content-Type',
-      'Access-Control-Allow-Headers', 
-      'Origin', 
-      'X-Requested-With', 
-        'Accept'
-    ],
-  };
-  
-  app.use(cors(corsOpts));
-
 // Twilio Routes
 app.get('/twillio/token', function (request, response) {
     const name = request.query.name || 'identity';
     const room = request.query.room;
 
     response.setHeader('Content-Type', 'application/json');
-    // response.setHeader("Access-Control-Allow-Origin", "*")
-    // response.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    response.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
     response.send({ "token": tokenGenerator(name, room) });
 });
 
@@ -104,13 +73,6 @@ function tokenGenerator(identity, room) {
 var opentok = new OpenTok(vonageAPIKey, vonageSecret);
 var roomToSessionIdDictionary = {};
 
-// app.get('/vonage/session', function (req, res) {
-//     res.setHeader('Content-Type', 'application/json');
-//     // res.setHeader("Access-Control-Allow-Origin", "*")
-//     // res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
-//     res.redirect('/vonage/room/session');
-// });
-
 app.get('/vonage/room/:name', function (req, res) {
     var roomName = req.params.name;
     var token;
@@ -120,7 +82,7 @@ app.get('/vonage/room/:name', function (req, res) {
         // generate token
         token = opentok.generateToken(sessionId);
         res.setHeader('Content-Type', 'application/json');
-        // res.header("Access-Control-Allow-Origin", "*")
+        res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
 
         res.send({
             apiKey: vonageAPIKey,
@@ -136,17 +98,12 @@ app.get('/vonage/room/:name', function (req, res) {
                 return;
             }
 
-            // now that the room name has a session associated wit it, store it in memory
-            // IMPORTANT: Because this is stored in memory, restarting your server will reset these values
-            // if you want to store a room-to-session association in your production application
-            // you should use a more persistent storage for them
             roomToSessionIdDictionary[roomName] = session.sessionId;
 
-            // generate token
             token = opentok.generateToken(session.sessionId);
             res.setHeader('Content-Type', 'application/json');
-            // res.header("Access-Control-Allow-Origin", "*")
-
+            res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+        
             res.send({
                 apiKey: vonageAPIKey,
                 sessionId: session.sessionId,
@@ -171,7 +128,7 @@ app.get('/agoraRtcToken', function (req, resp) {
 
     var key = RtcTokenBuilder.buildTokenWithUid(agoraAppID, agoraAppCertificate, channelName, uid, role, privilegeExpiredTs);
 
-    // resp.header("Access-Control-Allow-Origin", "*")
+    resp.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
     return resp.json({ 'key': key }).send();
 });
 
@@ -195,7 +152,7 @@ app.get('/zoomsignature/:name', (req, res) => {
     const sHeader = JSON.stringify(oHeader)
     const sPayload = JSON.stringify(oPayload)
     const signature = KJUR.jws.JWS.sign('HS256', sHeader, sPayload, zoomSecret)
-    // res.header("Access-Control-Allow-Origin", "*")
+    res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
 
     res.json({
         signature: signature
