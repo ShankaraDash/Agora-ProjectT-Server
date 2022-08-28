@@ -51,7 +51,7 @@ app.use(app.router);
 // });
 
 const corsOpts = {
-    origin: '*',
+    origin: 'https://agora-3d464.web.app',
   
     methods: [
       'GET',
