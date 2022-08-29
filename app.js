@@ -47,6 +47,7 @@ app.get('/twillio/token', function (request, response) {
 
     response.setHeader('Content-Type', 'application/json');
     response.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
     response.send({ "token": tokenGenerator(name, room) });
 });
 
@@ -75,6 +76,8 @@ var roomToSessionIdDictionary = {};
 app.get('/vonage/session', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
+
     res.redirect('/vonage/room/session');
 });
 
@@ -88,6 +91,7 @@ app.get('/vonage/room/:name', function (req, res) {
         token = opentok.generateToken(sessionId);
         res.setHeader('Content-Type', 'application/json');
         res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
         res.send({
             apiKey: vonageAPIKey,
@@ -108,7 +112,8 @@ app.get('/vonage/room/:name', function (req, res) {
             token = opentok.generateToken(session.sessionId);
             res.setHeader('Content-Type', 'application/json');
             res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
-        
+            res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
+
             res.send({
                 apiKey: vonageAPIKey,
                 sessionId: session.sessionId,
@@ -133,7 +138,8 @@ app.get('/agoraRtcToken', function (req, resp) {
 
     var key = RtcTokenBuilder.buildTokenWithUid(agoraAppID, agoraAppCertificate, channelName, uid, role, privilegeExpiredTs);
 
-    resp.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    resp.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
+    resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
     return resp.json({ 'key': key }).send();
 });
 
@@ -157,7 +163,8 @@ app.get('/zoomsignature/:name', (req, res) => {
     const sHeader = JSON.stringify(oHeader)
     const sPayload = JSON.stringify(oPayload)
     const signature = KJUR.jws.JWS.sign('HS256', sHeader, sPayload, zoomSecret)
-    res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
     res.json({
         signature: signature
