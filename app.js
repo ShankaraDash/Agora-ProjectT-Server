@@ -81,8 +81,9 @@ app.get('/vonage/session', function (req, res) {
     res.redirect('/vonage/room/session');
 });
 
-app.get('/vonage/room/:name', function (req, res) {
-    var roomName = req.params.name;
+app.get('/vonage/room', function (req, res) {
+    var roomName = req.query.name;
+
     var token;
 
     if (roomToSessionIdDictionary[roomName]) {
@@ -98,8 +99,7 @@ app.get('/vonage/room/:name', function (req, res) {
             sessionId: sessionId,
             token: token
         });
-    }
-    else {
+    } else {
         opentok.createSession({ mediaMode: 'routed' }, function (err, session) {
             if (err) {
                 console.log(err);
