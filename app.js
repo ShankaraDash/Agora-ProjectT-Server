@@ -75,7 +75,7 @@ var opentok = new OpenTok(vonageAPIKey, vonageSecret);
 var roomToSessionIdDictionary = {};
 app.get('/vonage/session', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
     res.redirect('/vonage/room/session');
@@ -90,7 +90,7 @@ app.get('/vonage/room/:name', function (req, res) {
         // generate token
         token = opentok.generateToken(sessionId);
         res.setHeader('Content-Type', 'application/json');
-        res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+        res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
         res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
         res.send({
@@ -111,7 +111,7 @@ app.get('/vonage/room/:name', function (req, res) {
 
             token = opentok.generateToken(session.sessionId);
             res.setHeader('Content-Type', 'application/json');
-            res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+            res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
             res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
             res.send({
