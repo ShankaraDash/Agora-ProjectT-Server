@@ -27,8 +27,8 @@ let vonageSecret = "59203ea5e094de7fff67cb229a9a5d0753d873c5";
 
 // Twilio Cred
 let twilioAccountSID = "ACf2dddd4c5aa931567228e5f837ae1c49";
-let twilioSDKSID = "SKeb70b556ae033532f8937be742a80264";
-let twilioSecret = "q6YeGIiM71l2fQcbOsCJgx5Fln981aLk";
+let twilioSDKSID = "SKde01609b75480614a95ceefb90fe2406";
+let twilioSecret = "BqNU0oSHMaznNhFLxo8uEk76OGcie7TR";
 
 //Zoom Cred 
 let zoomAPIKey = "RCSaKX53beXEwKzstNVSdqPk9ERbnMg7kAl6";
