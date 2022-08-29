@@ -22,8 +22,8 @@ let agoraAppID = "5368a8c9785e462197a41827cda88d96";
 let agoraAppCertificate = "e4c907781536450783184d5f00c12f4f";
 
 // Vonage/TokBox Cred
-let vonageAPIKey = "4223481";
-let vonageSecret = "5a64f3dde1fb97dcbf5fee9ce16ebd217ea05b70";
+let vonageAPIKey = "47562661";
+let vonageSecret = "5fe5b9cc1a1a341456a659d0b7cce7422b7253c6";
 
 // Twilio Cred
 let twilioAccountSID = "ACf2dddd4c5aa931567228e5f837ae1c49";
