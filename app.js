@@ -40,6 +40,15 @@ app.set('port', 8080);
 app.use(express.favicon());
 app.use(app.router);
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');    
+    res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+
 // Twilio Routes
 app.get('/twillio/token', function (request, response) {
     const name = request.query.name || 'identity';
