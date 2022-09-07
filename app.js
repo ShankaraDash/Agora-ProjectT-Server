@@ -42,7 +42,7 @@ app.use(app.router);
 
 
 app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000', 'https://agora-3d464.web.app'];
+    const allowedOrigins = ['https://agora-3d464.web.app'];
     const origin = req.headers.origin;
     console.log("Asfd", origin)
     if (allowedOrigins.includes(origin)) {
@@ -58,7 +58,6 @@ app.get('/twillio/token', function (request, response) {
 
     response.setHeader('Content-Type', 'application/json');
     response.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
     response.send({ "token": tokenGenerator(name, room) });
 });
 
@@ -87,7 +86,6 @@ var roomToSessionIdDictionary = {};
 app.get('/vonage/session', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
     res.redirect('/vonage/room/session');
 });
@@ -103,7 +101,6 @@ app.get('/vonage/room', function (req, res) {
         token = opentok.generateToken(sessionId);
         res.setHeader('Content-Type', 'application/json');
         res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
         res.send({
             apiKey: vonageAPIKey,
@@ -123,7 +120,6 @@ app.get('/vonage/room', function (req, res) {
             token = opentok.generateToken(session.sessionId);
             res.setHeader('Content-Type', 'application/json');
             res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-            res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
 
             res.send({
                 apiKey: vonageAPIKey,
@@ -151,7 +147,6 @@ app.get('/agoraRtcToken', function (req, resp) {
     var key = RtcTokenBuilder.buildTokenWithUid(agoraAppID, agoraAppCertificate, channelName, uid, role, privilegeExpiredTs);
 
     resp.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-    resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
     return resp.json({ 'key': key }).send();
 });
 
