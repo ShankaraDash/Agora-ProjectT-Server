@@ -41,21 +41,13 @@ app.set('port', 8080);
 app.use(express.favicon());
 app.use(app.router);
 
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            
+   optionSuccessStatus:200,
+}
 
-app.use(cors({
-  origin: "https://agora-3d464.web.app"
-}));
-
-app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000', 'https://agora-3d464.web.app'];
-    const origin = req.headers.origin;
-    console.log("Asfd", origin)
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-    return next();
-});
-
+app.use(cors(corsOptions))
 // Twilio Routes
 app.get('/twillio/token', function (request, response) {
     const name = request.query.name || 'identity';
