@@ -46,13 +46,14 @@ app.use(cors({
   origin: "https://agora-3d464.web.app"
 }));
 
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');    
-    res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
+app.use((req, res, next) => {
+    const allowedOrigins = ['http://localhost:3000', 'https://agora-3d464.web.app'];
+    const origin = req.headers.origin;
+    console.log("Asfd", origin)
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    return next();
 });
 
 // Twilio Routes
