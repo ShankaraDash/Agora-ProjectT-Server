@@ -50,7 +50,7 @@ app.use((req, res, next) => {
     }
     return next();
 });
-
+console.log("Asfd")
 // Twilio Routes
 app.get('/twillio/token', function (request, response) {
     const name = request.query.name || 'identity';
@@ -136,6 +136,7 @@ app.get('/vonage/room', function (req, res) {
 
 // Agora Routes
 app.get('/agoraRtcToken', function (req, resp) {
+    console.log("Asfd")
     var role = req.query.role || RtcRole.PUBLISHER;
 
     var currentTimestamp = Math.floor(Date.now() / 1000)
