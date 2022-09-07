@@ -40,25 +40,23 @@ app.set('port', 8080);
 app.use(express.favicon());
 app.use(app.router);
 
-
-app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000','https://agora-3d464.web.app'];
+function setOrigin(req, res) {
+    const allowedOrigins = ['https://agora-3d464.web.app', 'http://localhost:3000'];
     const origin = req.headers.origin;
-    console.log("Asfd", origin)
     if (allowedOrigins.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
     }
-    return next();
-});
-console.log("Asfd")
-// Twilio Routes
-app.get('/twillio/token', function (request, response) {
-    const name = request.query.name || 'identity';
-    const room = request.query.room;
+    return res
+}
 
-    response.setHeader('Content-Type', 'application/json');
-    // response.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-    response.send({ "token": tokenGenerator(name, room) });
+app.get('/twillio/token', function (req, res) {
+    res = setOrigin(req, res)
+
+    const room = req.query.room;
+    const name = req.query.name || 'identity';
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send({ "token": tokenGenerator(name, room) });
 });
 
 function tokenGenerator(identity, room) {
@@ -84,13 +82,13 @@ function tokenGenerator(identity, room) {
 var opentok = new OpenTok(vonageAPIKey, vonageSecret);
 var roomToSessionIdDictionary = {};
 app.get('/vonage/session', function (req, res) {
+    res = setOrigin(req, res)
     res.setHeader('Content-Type', 'application/json');
-    // res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-
     res.redirect('/vonage/room/session');
 });
 
 app.get('/vonage/room', function (req, res) {
+    res = setOrigin(req, res)
     var roomName = req.query.name;
 
     var token;
@@ -100,7 +98,6 @@ app.get('/vonage/room', function (req, res) {
         // generate token
         token = opentok.generateToken(sessionId);
         res.setHeader('Content-Type', 'application/json');
-        // res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
 
         res.send({
             apiKey: vonageAPIKey,
@@ -110,7 +107,6 @@ app.get('/vonage/room', function (req, res) {
     } else {
         opentok.createSession({ mediaMode: 'routed' }, function (err, session) {
             if (err) {
-                console.log(err);
                 res.status(500).send({ error: 'createSession error:' + err });
                 return;
             }
@@ -119,8 +115,6 @@ app.get('/vonage/room', function (req, res) {
 
             token = opentok.generateToken(session.sessionId);
             res.setHeader('Content-Type', 'application/json');
-            // res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-
             res.send({
                 apiKey: vonageAPIKey,
                 sessionId: session.sessionId,
@@ -131,29 +125,27 @@ app.get('/vonage/room', function (req, res) {
 });
 
 // Agora Routes
-app.get('/agoraRtcToken', function (req, resp) {
-    console.log("Asfd")
+app.get('/agoraRtcToken', function (req, res) {
+    res = setOrigin(req, res)
+    
     var role = req.query.role || RtcRole.PUBLISHER;
-
     var currentTimestamp = Math.floor(Date.now() / 1000)
     var privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds
     var channelName = req.query.channelName;
     // use 0 if uid is not specified
     var uid = 0
     if (!channelName) {
-        return resp.status(400).json({ 'error': 'channel name is required' }).send();
+        return res.status(400).json({ 'error': 'channel name is required' }).send();
     }
 
     var key = RtcTokenBuilder.buildTokenWithUid(agoraAppID, agoraAppCertificate, channelName, uid, role, privilegeExpiredTs);
-
-    // resp.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
-    return resp.json({ 'key': key }).send();
+    return res.json({ 'key': key }).send();
 });
 
 
 // Zoom Routes
 app.get('/zoomsignature/:name', (req, res) => {
-
+    res = setOrigin(req, res)
     const iat = Math.round((new Date().getTime() - 30000) / 1000)
     const exp = iat + 60 * 60 * 2
 
@@ -170,7 +162,6 @@ app.get('/zoomsignature/:name', (req, res) => {
     const sHeader = JSON.stringify(oHeader)
     const sPayload = JSON.stringify(oPayload)
     const signature = KJUR.jws.JWS.sign('HS256', sHeader, sPayload, zoomSecret)
-    // res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
 
     res.json({
         signature: signature
