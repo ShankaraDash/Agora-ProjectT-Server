@@ -1,6 +1,7 @@
 // Common Imports
 const http = require('http');
 const express = require('express');
+const cors = require('cors');
 
 // Agora Imports
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token')
@@ -40,11 +41,16 @@ app.set('port', 8080);
 app.use(express.favicon());
 app.use(app.router);
 
+
+app.use(cors({
+  origin: "https://agora-3d464.web.app"
+}));
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');    
-    res.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    res.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
@@ -55,7 +61,7 @@ app.get('/twillio/token', function (request, response) {
     const room = request.query.room;
 
     response.setHeader('Content-Type', 'application/json');
-    response.setHeader("Access-Control-Allow-Origin", " https://agora-3d464.web.app")
+    response.setHeader("Access-Control-Allow-Origin", "https://agora-3d464.web.app")
     response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
     response.send({ "token": tokenGenerator(name, room) });
 });
