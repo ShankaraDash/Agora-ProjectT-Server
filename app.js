@@ -244,7 +244,10 @@ function createRoom(roomName, onCompletion) {
                 'description': 'This is a demo room',
                 'region': 'auto'
             })
-        }).then(data => data.json())
+        }).then(data => {
+            console.log("ASDf", data.json())
+            return data.json()
+        })
         .then((res)=> {
             console.log("Room", res);
             onCompletion(res);
