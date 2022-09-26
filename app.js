@@ -199,6 +199,7 @@ app.get('/100msAuthToken', (req, res) => {
                 jwtid: uuid4()
             },
             function (err, token) {
+                console.log("Error", err)
                 res.json({
                     token: token
                 })
@@ -246,7 +247,6 @@ function createRoom(roomName, onCompletion) {
                 'region': 'auto'
             })
         }).then(data => {
-            console.log("ASDf", data.json())
             return data.json()
         }).then((res)=> {
             console.log("Room", res);
