@@ -11,7 +11,8 @@
     "express": "3.4.8",
     "jsrsasign": "^10.5.26",
     "opentok": "^2.11.0",
-    "twilio": "^3.0.0"
+    "twilio": "^3.0.0",
+    "uuid4": "^2.0.3"
   },
   "main": "DemoServer.js",
   "author": "agora"

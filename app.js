@@ -1,6 +1,8 @@
 // Common Imports
 const http = require('http');
 const express = require('express');
+var jwt = require('jsonwebtoken');
+var uuid4 = require('uuid4');
 
 // Agora Imports
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token')
@@ -39,6 +41,11 @@ app.disable('x-powered-by');
 app.set('port', 8080);
 app.use(express.favicon());
 app.use(app.router);
+
+
+// 100MS Cred
+var app_access_key = '62ded320c16640065695d3fe';
+var app_secret = 'eAk_W9fZh1OTxMIE5qcQ6B-gbPn3T6NGyuxvfRH4-7MEZxoGRvM7D1-g57ip1F2lj3MSWNIBHq_KBv0Im7RQFvBlyJ4UXu7VKKnSa6jWNPAvxZ-ErBh7NVM57NhgEwyQ2JtYdBhmY5AWj8K3hEeAPj8lv6X3iasMLvcLTZrWHDA=';
 
 function setOrigin(req, res) {
     const allowedOrigins = ['https://agora-3d464.web.app', 'http://localhost:3000'];
@@ -167,6 +174,80 @@ app.get('/zoomsignature/:name', (req, res) => {
         signature: signature
     })
 })
+
+// Zoom Routes
+app.get('/100msAuthToken', (req, res) => {
+    res = setOrigin(req, res)
+    createRoom(req.query.name, (room) => {
+        var payload = {
+            access_key: app_access_key,
+            room_id: room.id,
+            user_id: uuid4(),
+            // role: '<role>',
+            type: 'app',
+            version: 2,
+            iat: Math.floor(Date.now() / 1000),
+            nbf: Math.floor(Date.now() / 1000)
+        };
+        
+        jwt.sign(
+            payload,
+            app_secret,
+            {
+                algorithm: 'HS256',
+                expiresIn: '24h',
+                jwtid: uuid4()
+            },
+            function (err, token) {
+                res.json({
+                    token: token
+                })
+            }) 
+            }
+    );
+});
+
+function createManagementToken(onSuccess) {
+    jwt.sign(
+        {
+            access_key: app_access_key,
+            type: 'management',
+            version: 2,
+            iat: Math.floor(Date.now() / 1000),
+            nbf: Math.floor(Date.now() / 1000)
+        },
+        app_secret,
+        {
+            algorithm: 'HS256',
+            expiresIn: '24h',
+            jwtid: uuid4()
+        },
+        function (err, token) {
+            onSuccess(token)
+        }
+    );
+    
+}
+
+function createRoom(roomName, onCompletion) {
+    createManagementToken((token) => {
+        fetch('https://api.100ms.live/v2/rooms', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'name': roomName,
+            'description': 'This is a demo room',
+            'region': 'auto'
+        })
+        }).then(res => {
+            onCompletion(res.json);
+        })
+    })
+}
+
 
 
 http.createServer(app).listen(process.env.PORT || app.get('port'), function () {
