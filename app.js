@@ -175,39 +175,9 @@ app.get('/zoomsignature/:name', (req, res) => {
     })
 })
 
-// Zoom Routes
-app.get('/100msAuthToken', (req, res) => {
+// 100MS Routes
+app.get('/100msAuthToken/managementToken', (req, res) => {
     res = setOrigin(req, res)
-    createRoom(req.query.name, (room) => {
-        var payload = {
-            access_key: app_access_key,
-            room_id: room.id,
-            user_id: uuid4(),
-            role: 'guest',
-            type: 'app',
-            version: 2,
-            iat: Math.floor(Date.now() / 1000),
-            nbf: Math.floor(Date.now() / 1000)
-        };
-        
-        jwt.sign(
-            payload,
-            app_secret,
-            {
-                algorithm: 'HS256',
-                expiresIn: '24h',
-                jwtid: uuid4()
-            },
-            function (err, token) {
-                console.log("Error", err)
-                res.send({
-                    token: token
-                })
-        }) 
-    });
-});
-
-function createManagementToken(onSuccess) {
     jwt.sign(
         {
             access_key: app_access_key,
@@ -223,40 +193,51 @@ function createManagementToken(onSuccess) {
             jwtid: uuid4()
         },
         function (err, token) {
+            console.log("err", err);
             console.log("createManagementToken", token);
-            onSuccess(token)
+            res.send({
+                token: token
+            })
         }
     );
-    
-}
+});
+
+app.get('/100msAuthToken/authtoken', (req, res) => {
+    res = setOrigin(req, res)
+    let roomID = req.query.roomID;
+    console.log("room ID ", roomID);
+    var payload = {
+        access_key: app_access_key,
+        room_id: roomID,
+        user_id: uuid4(),
+        role: 'guest',
+        type: 'app',
+        version: 2,
+        iat: Math.floor(Date.now() / 1000),
+        nbf: Math.floor(Date.now() / 1000)
+    };
+    jwt.sign(
+        payload,
+        app_secret,
+        {
+            algorithm: 'HS256',
+            expiresIn: '24h',
+            jwtid: uuid4()
+        },
+        function (err, token) {
+            console.log("Error", err)
+            res.send({
+                token: token
+            })
+    })
+
+});
 
 function createRoom(roomName, onCompletion) {
     console.log("Room Name", roomName);
     createManagementToken((token) => {
         console.log("Creating Room", token);
         console.log("Creating roomName", roomName);
-        fetch('https://api.100ms.live/v2/rooms', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'name': roomName,
-                'description': 'This is a demo room',
-                'region': 'auto'
-            })
-        }).then(data => {
-            return data.json()
-        }).then((res)=> {
-            console.log("Room", res);
-            onCompletion(res);
-        }).catch(err=>{
-            console.log("Room err", err);
-        }).finally(err=> {
-            console.log("Room err finally", err);
-
-        });
     })
 }
 
