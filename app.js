@@ -183,7 +183,7 @@ app.get('/100msAuthToken', (req, res) => {
             access_key: app_access_key,
             room_id: room.id,
             user_id: uuid4(),
-            // role: '<role>',
+            role: 'guest',
             type: 'app',
             version: 2,
             iat: Math.floor(Date.now() / 1000),
@@ -223,6 +223,7 @@ function createManagementToken(onSuccess) {
             jwtid: uuid4()
         },
         function (err, token) {
+            console.log("createManagementToken", token);
             onSuccess(token)
         }
     );
@@ -230,7 +231,9 @@ function createManagementToken(onSuccess) {
 }
 
 function createRoom(roomName, onCompletion) {
+    console.log("Room Name", roomName);
     createManagementToken((token) => {
+        console.log("Creating Room");
         fetch('https://api.100ms.live/v2/rooms', {
         method: 'POST',
         headers: {
@@ -242,9 +245,12 @@ function createRoom(roomName, onCompletion) {
             'description': 'This is a demo room',
             'region': 'auto'
         })
-        }).then(res => {
-            onCompletion(res.json);
         })
+        .then(data => data.json())
+        .then((res)=> {
+            console.log("Room", res);
+            onCompletion(res);
+        });
     })
 }
 
