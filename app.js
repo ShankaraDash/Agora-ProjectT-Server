@@ -200,7 +200,7 @@ app.get('/100msAuthToken', (req, res) => {
             },
             function (err, token) {
                 console.log("Error", err)
-                res.json({
+                res.send({
                     token: token
                 })
         }) 
