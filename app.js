@@ -232,7 +232,8 @@ function createManagementToken(onSuccess) {
 function createRoom(roomName, onCompletion) {
     console.log("Room Name", roomName);
     createManagementToken((token) => {
-        console.log("Creating Room");
+        console.log("Creating Room", token);
+        console.log("Creating roomName", roomName);
         fetch('https://api.100ms.live/v2/rooms', {
             method: 'POST',
             headers: {
@@ -247,12 +248,14 @@ function createRoom(roomName, onCompletion) {
         }).then(data => {
             console.log("ASDf", data.json())
             return data.json()
-        })
-        .then((res)=> {
+        }).then((res)=> {
             console.log("Room", res);
             onCompletion(res);
         }).catch(err=>{
             console.log("Room err", err);
+        }).finally(err=> {
+            console.log("Room err finally", err);
+
         });
     })
 }
