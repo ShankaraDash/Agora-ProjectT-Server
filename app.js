@@ -202,9 +202,8 @@ app.get('/100msAuthToken', (req, res) => {
                 res.json({
                     token: token
                 })
-            }) 
-            }
-    );
+        }) 
+    });
 });
 
 function createManagementToken(onSuccess) {
@@ -235,21 +234,22 @@ function createRoom(roomName, onCompletion) {
     createManagementToken((token) => {
         console.log("Creating Room");
         fetch('https://api.100ms.live/v2/rooms', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            'name': roomName,
-            'description': 'This is a demo room',
-            'region': 'auto'
-        })
-        })
-        .then(data => data.json())
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'name': roomName,
+                'description': 'This is a demo room',
+                'region': 'auto'
+            })
+        }).then(data => data.json())
         .then((res)=> {
             console.log("Room", res);
             onCompletion(res);
+        }).catch(err=>{
+            console.log("Room err", err);
         });
     })
 }
